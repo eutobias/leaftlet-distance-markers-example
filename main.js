@@ -60,22 +60,14 @@ var events = {
 }
 
 var geoLocationAvailable = ("geolocation" in navigator) ? true : false
-var fakeLocation = '-22.956695149144675 -43.191980141205185'
-var currentLocation = ''
+var currentLocation = { lat: -22.90338998500897, long: -43.19163490026312 }
 
 var templates = {
-  storeItemList: `<li>
-    <span class="store-distance"></span>
-    <span class="store-data">
-      <span class="store-name"></span>
-      <span class="store-address"></span>
-    </span>
-    <span class="shipping-price"></span>
-  </li>`
+  storeItemList: '<li><span class="store-distance"></span><span class="store-data"><span class="store-name"></span><span class="store-address"></span></span><span class="shipping-price"></span></li>'
 }
+var startLocation = { lat: -22.90338998500897, long: -43.19163490026312 } // Central do Brasil no RJ
 
 function initMap() {
-  var startLocation = { lat: -22.90338998500897, long: -43.19163490026312 } // Central do Brasil no RJ
   var map = L.map('map-wrapper', {
     center: [startLocation.lat, startLocation.long],
     zoom: 15
@@ -138,7 +130,7 @@ $(document).ready(function () {
             .addTo(MapInstance)
             .bindPopup(
               L.popup()
-                .setLatLng([currentLocation.lat, currentLocation.long])
+                .setLatLng([v.lat, v.long])
                 .setContent('<p>' + v.store.name + '<br>' + v.store.address + '</p>')
             )
         )
@@ -152,17 +144,18 @@ $(document).ready(function () {
           distance = (distance < 1) ? distance.toFixed(2) : distance.toFixed(0)
 
           $tpl.find('.store-distance').html(distance + 'km')
-          $tpl.on('click', function () {
-            var i = $(this).attr('id').replace('store-','')
-            storeMarkers[i].openPopup();
-            MapInstance.panTo([$(this).attr('data-latitude'), $(this).attr('data-longitude')])
-          })
         }
+
+        $tpl.on('click', function () {
+          var i = $(this).attr('id').replace('store-', '')
+          storeMarkers[i].openPopup();
+          MapInstance.panTo([$(this).attr('data-latitude'), $(this).attr('data-longitude')])
+        })
 
         $container.append($tpl)
       })
 
-    }).catch(function () { })
+    }).catch(function (e) { console.error(e) })
   })
 
 })

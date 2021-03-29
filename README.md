@@ -3,4 +3,8 @@ A Leaftlet example of usage, it put some markers on map and navigate between the
 
 To run this test just use:
 
-``npm start``
+``npm run dev``
+
+If you want to build this (i dont imagine why :P)
+
+``npm run build``
